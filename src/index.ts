@@ -55,32 +55,6 @@ const REQUIRED_CONFIG_FIELDS = [
 ] as const;
 
 function validateConfig(config: AuthKitConfig): void {
-  const missing = REQUIRED_CONFIG_FIELDS.filter((field) => !config[field.key as keyof AuthKitConfig]).map(
-    (field) => field.envVar,
-  );
-
-  if (missing.length > 0) {
-    throw new Error(
-      `Missing required configuration: ${missing.join(', ')}\n\n` +
-        `Configure in your hooks.server.ts:\n\n` +
-        `import { configureAuthKit, authKitHandle } from '@workos/authkit-sveltekit';\n` +
-        `import { env } from '$env/dynamic/private';\n\n` +
-        `configureAuthKit({\n` +
-        `  clientId: env.WORKOS_CLIENT_ID,\n` +
-        `  apiKey: env.WORKOS_API_KEY,\n` +
-        `  redirectUri: env.WORKOS_REDIRECT_URI,\n` +
-        `  cookiePassword: env.WORKOS_COOKIE_PASSWORD\n` +
-        `});\n\n` +
-        `export const handle = authKitHandle();`,
-    );
-  }
-
-  if (config.cookiePassword.length < 32) {
-    throw new Error(
-      'cookiePassword must be at least 32 characters long.\n' +
-        'Generate a secure password using: openssl rand -base64 24',
-    );
-  }
 }
 
 // Create AuthKit instance with the given configuration
